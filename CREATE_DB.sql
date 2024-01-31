@@ -1,0 +1,7 @@
+CREATE ROLE storage LOGIN PASSWORD 'storage';
+
+CREATE DATABASE filestorage;
+
+GRANT ALL PRIVILEGES ON DATABASE filestorage TO storage;
+
+CREATE SCHEMA storage.s AUTHORIZATION storage;
