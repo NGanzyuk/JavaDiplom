@@ -1,5 +1,6 @@
 package projects.javadiplom.config;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,16 +21,16 @@ import projects.javadiplom.security.JwtRequestFilter;
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
+@RequiredArgsConstructor
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired
-    private JwtAuthenticationEntryPoint entryPoint;
+    private final JwtAuthenticationEntryPoint entryPoint;
 
-    @Autowired
-    private UserDetailsService userDetails;
+    private final UserDetailsService userDetails;
 
-    @Autowired
-    private JwtRequestFilter requestFilter;
+    private final JwtRequestFilter requestFilter;
+
+    private String allowedEndPoints = "/login";
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
@@ -50,7 +51,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.csrf().disable()
-                .authorizeRequests().antMatchers("/login", "/logout", "/file", "/list", "/register").permitAll().
+                .authorizeRequests().antMatchers(allowedEndPoints).permitAll().
                 anyRequest().authenticated().and().
                 exceptionHandling().authenticationEntryPoint(entryPoint)
                 .and().sessionManagement()

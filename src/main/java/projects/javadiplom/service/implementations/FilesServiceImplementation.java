@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import projects.javadiplom.service.interfaces.FilesService;
 
+import javax.persistence.Lob;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -35,6 +36,7 @@ public class FilesServiceImplementation implements FilesService {
 
 
     @Override
+    @Lob
     public void newFile(String dir, MultipartFile file) {
         try {
             Path dirPath = Paths.get(homeDir + "/" + dir);
@@ -88,13 +90,8 @@ public class FilesServiceImplementation implements FilesService {
     }
 
     @Override
-    public ResponseEntity<?> list(String dir, String token) {
+    public String list(String dir) {
         Path dirPath = Paths.get(homeDir + "/" + dir);
-
-        HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.set("auth-token", token);
-        responseHeaders.set("Content-Type", "application/json;charset=UTF-8");
-
         StringBuilder body = new StringBuilder();
 
         body.append("[");
@@ -111,6 +108,6 @@ public class FilesServiceImplementation implements FilesService {
             }
         }
         body.append("]");
-        return new ResponseEntity(body.toString(), responseHeaders, HttpStatus.OK);
+        return body.toString();
     }
 }

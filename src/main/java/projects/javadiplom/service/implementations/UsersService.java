@@ -1,5 +1,6 @@
 package projects.javadiplom.service.implementations;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -7,22 +8,21 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import projects.javadiplom.entity.User;
-import projects.javadiplom.model.userModel;
+import projects.javadiplom.model.UserModel;
 import projects.javadiplom.repository.UsersRepository;
 
 import java.util.ArrayList;
 
 @Service
+@RequiredArgsConstructor
 public class UsersService implements UserDetailsService {
 
-    @Autowired
-    FilesServiceImplementation filesService;
 
-    @Autowired
-    private UsersRepository userDao;
+    private final FilesServiceImplementation filesService;
 
-    @Autowired
-    private PasswordEncoder bcryptEncoder;
+    private final UsersRepository userDao;
+
+    private final PasswordEncoder bcryptEncoder;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -34,7 +34,7 @@ public class UsersService implements UserDetailsService {
                 new ArrayList<>());
     }
 
-    public User save(userModel user) {
+    public User save(UserModel user) {
         User newUser = new User();
         newUser.setLogin(user.getLogin());
         newUser.setPassword(bcryptEncoder.encode(user.getPassword()));

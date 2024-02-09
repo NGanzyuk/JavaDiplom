@@ -16,5 +16,5 @@ public interface FilesService {
     public void deleteFile(String dir, String fileName);
 
 
-    public ResponseEntity<?> list(String dir, String token);
+    public String list(String dir);
 }
